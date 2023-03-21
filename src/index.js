@@ -1,8 +1,11 @@
 import express from "express";
 import createApp from "./app.js";
+import dbConn from "./database/connection.js";
 
 const server = async () => {
   const app = express();
+
+  await dbConn();
 
   await createApp(app);
 
