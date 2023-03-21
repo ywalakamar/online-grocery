@@ -4,7 +4,8 @@
   "description": "An online grocery store",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,10 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.21"
-  }
+    "nodemon": "^2.0.21",
+    "@babel/core": "^7.20.12",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.20.2"
+  },
+  "type": "module"
 }
