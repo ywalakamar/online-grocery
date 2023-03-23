@@ -10,6 +10,7 @@ import {
   checkBlankValues,
   checkKeys,
   checkProperties,
+  isValidId,
 } from "../utils/validation/validations";
 
 const createProduct = async (req, res, next) => {
@@ -59,7 +60,14 @@ const getAllProducts = async (req, res, next) => {
 };
 
 const getProductById = async (req, res, next) => {
+  const id = req.params.id;
+  const validId = isValidId(id);
   try {
+    /* check if the provided id is valid */
+    if (!validId) {
+      throw new BadRequestError(`Invalid Id:(${id})`);
+    }
+
     const { data } = await getOne(req.params.id);
 
     /*check if the returned json object is empty */

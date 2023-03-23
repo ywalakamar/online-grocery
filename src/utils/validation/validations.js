@@ -1,4 +1,5 @@
 import { getUniqueKeys, json2Array } from "./functions";
+import mongoose from "mongoose";
 
 /**
  * Check for blank values
@@ -52,4 +53,8 @@ const checkProperties = (obj, keys) => {
   return keys.diff(array);
 };
 
-export { checkBlankValues, checkKeys, checkProperties };
+const isValidId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
+
+export { checkBlankValues, checkKeys, checkProperties, isValidId };
