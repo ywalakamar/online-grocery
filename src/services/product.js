@@ -1,33 +1,34 @@
-// import ProductRepository from "../database/repositories/product";
-// import formatData from "../utils";
-
-import Product from "../models/Product";
-
-// class ProductService {
-//   constructor() {
-//     this.repository = new ProductRepository();
-//   }
-
-//   async createProduct(product) {
-//     try {
-//       const results = await this.repository.createProduct(product);
-//       return formatData(results);
-//     } catch (error) {}
-//   }
-// }
-
-// export default ProductService;
+import Product from "../models/product";
 
 const create = async (product) => {
-  return await Product.create(product);
+  try {
+    const results = await Product.create(product);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
 };
 
 const getAll = async () => {
-  return await Product.find();
+  try {
+    return {
+      success: true,
+      data: await Product.find(),
+    };
+  } catch (error) {
+    return { success: false, error };
+  }
 };
 
 const getOne = async (id) => {
-  return await Product.findById(id);
+  try {
+    return {
+      success: true,
+      data: await Product.findById(id),
+    };
+  } catch (error) {
+    return { success: false, error };
+  }
 };
 
 export { create, getAll, getOne };
