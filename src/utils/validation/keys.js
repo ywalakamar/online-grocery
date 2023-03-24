@@ -12,6 +12,7 @@ const keys = {
   customerKeys: ["email", "password", "phone"],
   addressKeys: ["street", "postalCode", "city", "country"],
   loginKeys: ["email", "password"],
+  cartKeys: ["_id", "quantity"],
 };
 
-export const { productKeys, customerKeys, addressKeys, loginKeys } = keys;
+export const { productKeys, customerKeys, addressKeys, loginKeys, cartKeys } = keys;
