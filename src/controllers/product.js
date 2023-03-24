@@ -1,3 +1,4 @@
+import { addCartItem } from "../services/customer";
 import { create, getAll, getOne } from "../services/product";
 import {
   BadRequestError,
@@ -5,7 +6,7 @@ import {
   STATUS_CODES,
 } from "../utils/appErrors";
 import { isEmpty } from "../utils/validation/functions";
-import { productKeys } from "../utils/validation/keys";
+import { productKeys, cartKeys } from "../utils/validation/keys";
 import {
   checkBlankValues,
   checkKeys,
@@ -82,4 +83,52 @@ const getProductById = async (req, res, next) => {
   }
 };
 
-export { createProduct, getAllProducts, getProductById };
+const manageCart = async (req, res, next) => {
+  const userInput = req.body;
+  const { _id, quantity } = userInput;
+  const customer = req.user;
+
+  /* data validation */
+  const invalidKeys = checkKeys(userInput, cartKeys);
+  const missingProperties = checkProperties(userInput, cartKeys);
+  const blankValues = checkBlankValues(userInput);
+  const validId = isValidId(_id);
+
+  try {
+    //validation
+
+    if (!validId) {
+      throw new BadRequestError(`Invalid Id:(${_id})`);
+    }
+
+    if (invalidKeys.length) {
+      throw new BadRequestError(`Invalid Keys:(${invalidKeys})`);
+    }
+    if (missingProperties.length) {
+      throw new BadRequestError(`Missing Properties:(${missingProperties})`);
+    }
+    if (blankValues.length) {
+      throw new BadRequestError(`Blank Values:(${blankValues})`);
+    }
+
+    const product = await getOne(_id);
+
+    /*check if the returned json object is empty */
+    if (!Object.keys(product.data).length) {
+      throw new NotFoundError("No Product Record Found");
+    }
+
+    // const product = data;
+    const { data } = await addCartItem(
+      customer._id,
+      product.data,
+      quantity,
+      false
+    );
+    return res.status(STATUS_CODES.CREATED).send({ data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createProduct, getAllProducts, getProductById, manageCart };
