@@ -107,6 +107,20 @@ const addCartItem = async (custId, product, quantity, isRemove) => {
   }
 };
 
+const getShoppingDetails = async (id) => {
+  try {
+    return {
+      success: true,
+      data: await Customer.findById(id)
+        .populate("address")
+        .populate("cart.product")
+        .populate("orders"),
+    };
+  } catch (error) {
+    return { success: false, error };
+  }
+};
+
 export {
   createCustomer,
   createAddress,
@@ -114,4 +128,5 @@ export {
   getCustomerByEmail,
   getCustomers,
   addCartItem,
+  getShoppingDetails,
 };

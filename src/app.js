@@ -2,6 +2,7 @@ import express from "express";
 import productRouter from "./routes/product.js";
 import ErrorHandler from "./middleware/errorHandler.js";
 import customerRouter from "./routes/customer.js";
+import { shoppingRouter } from "./routes/shopping.js";
 
 const createApp = async (app) => {
   app.use(express.json());
@@ -9,6 +10,7 @@ const createApp = async (app) => {
 
   app.use(productRouter);
   app.use(customerRouter);
+  app.use(shoppingRouter);
 
   app.use(ErrorHandler);
 };
