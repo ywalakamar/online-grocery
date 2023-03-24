@@ -62,7 +62,7 @@ class NotFoundError extends AppError {
   constructor(
     description,
     statusCode = STATUS_CODES.NOT_FOUND,
-    message = `${statusCode} NOT FOUND`,
+    message = `${statusCode} Not Found`,
     isOperational = true,
     loggingErrorResponse
   ) {
