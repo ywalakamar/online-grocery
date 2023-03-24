@@ -9,6 +9,9 @@ const keys = {
     "supplier",
     "available",
   ],
+  customerKeys: ["email", "password", "phone"],
+  addressKeys: ["street", "postalCode", "city", "country"],
+  loginKeys: ["email", "password"],
 };
 
-export const { productKeys } = keys;
+export const { productKeys, customerKeys, addressKeys, loginKeys } = keys;
