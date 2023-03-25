@@ -1,4 +1,4 @@
-import { addCartItem } from "../services/customer";
+import { addCartItem, getCart } from "../services/customer";
 import { create, getAll, getOne } from "../services/product";
 import {
   BadRequestError,
@@ -119,7 +119,7 @@ const manageCart = async (req, res, next) => {
     }
 
     // const product = data;
-    const { data } = await addCartItem(
+    const { success } = await addCartItem(
       customer._id,
       product.data,
       quantity,
@@ -127,10 +127,26 @@ const manageCart = async (req, res, next) => {
     );
     return res
       .status(STATUS_CODES.CREATED)
-      .send({ message: "Created", code: STATUS_CODES.CREATED, data });
+      .send({ message: "Created", code: STATUS_CODES.CREATED, success });
   } catch (error) {
     next(error);
   }
 };
 
-export { createProduct, getAllProducts, getProductById, manageCart };
+const getCartItems = async (req, res, next) => {
+  const { _id } = req.user;
+
+  const { data } = await getCart(_id);
+
+  return res
+    .status(STATUS_CODES.OK)
+    .json({ status: "OK", code: STATUS_CODES.OK, data });
+};
+
+export {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  manageCart,
+  getCartItems,
+};

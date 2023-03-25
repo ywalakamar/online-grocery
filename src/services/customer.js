@@ -101,7 +101,22 @@ const addCartItem = async (custId, product, quantity, isRemove) => {
       }
       // save items in customer's cart
       customer.cart = cartItems;
-      const data = await customer.save();
+      await customer.save();
+
+      return { success: true };
+    }
+  } catch (error) {
+    return { success: false, error };
+  }
+};
+
+const getCart = async (custId) => {
+  try {
+    //get customer
+    const customer = await Customer.findById(custId).populate("cart.product");
+    if (customer) {
+      // get cart items
+      const data = customer.cart;
 
       return { success: true, data };
     }
@@ -132,4 +147,5 @@ export {
   getCustomers,
   addCartItem,
   getShoppingDetails,
+  getCart,
 };
