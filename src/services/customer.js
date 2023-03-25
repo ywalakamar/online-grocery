@@ -13,7 +13,9 @@ const getCustomers = async () => {
   try {
     return {
       success: true,
-      data: await Customer.find().populate("address"),
+      data: await Customer.find()
+        .populate("address")
+        .select(["-cart", "-orders"]),
     };
   } catch (error) {
     return { success: false, error };
@@ -26,7 +28,8 @@ const getCustomerById = async (id) => {
       success: true,
       data: await Customer.findById(id)
         .populate("address")
-        .populate("cart.product"),
+        .populate("cart.product")
+        .populate("orders"),
     };
   } catch (error) {
     return { success: false, error };
@@ -66,7 +69,7 @@ const createAddress = async ({ _id, street, postalCode, city, country }) => {
 const addCartItem = async (custId, product, quantity, isRemove) => {
   try {
     //get customer
-    const customer = await Customer.findById(custId);
+    const customer = await Customer.findById(custId).populate("cart.product");
     if (customer) {
       const cartItem = { product, unit: quantity };
 
