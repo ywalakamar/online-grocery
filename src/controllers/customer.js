@@ -61,7 +61,7 @@ const signUp = async (req, res, next) => {
 
     return res
       .status(STATUS_CODES.CREATED)
-      .send({ status: "Created", code: STATUS_CODES.CREATED, data });
+      .send({ message: "Created", code: STATUS_CODES.CREATED, data });
   } catch (error) {
     next(error);
   }
@@ -111,7 +111,7 @@ const signIn = async (req, res, next) => {
     var { data } = formatData({ id: results.data._id, token });
     return res
       .status(STATUS_CODES.OK)
-      .send({ status: "OK", code: STATUS_CODES.OK, data });
+      .send({ message: "OK", code: STATUS_CODES.OK, data });
   } catch (error) {
     next(error);
   }
@@ -123,7 +123,7 @@ const getCustomerProfile = async (req, res, next) => {
     const { data } = await getCustomerById(_id);
     return res
       .status(STATUS_CODES.OK)
-      .send({ status: "OK", code: STATUS_CODES.OK, data });
+      .send({ message: "OK", code: STATUS_CODES.OK, data });
   } catch (error) {
     next(error);
   }
@@ -134,7 +134,7 @@ const getCustomerProfiles = async (req, res, next) => {
     const { data } = await getCustomers();
     return res
       .status(STATUS_CODES.OK)
-      .send({ status: "OK", code: STATUS_CODES.OK, data });
+      .send({ message: "OK", code: STATUS_CODES.OK, data });
   } catch (error) {
     next(error);
   }
@@ -173,7 +173,7 @@ const addCustomerAddress = async (req, res, next) => {
 
     return res
       .status(STATUS_CODES.CREATED)
-      .send({ status: "Created", code: STATUS_CODES.CREATED, success });
+      .send({ message: "Created", code: STATUS_CODES.CREATED, success });
   } catch (error) {
     next(error);
   }

@@ -33,14 +33,14 @@ const createProduct = async (req, res, next) => {
       throw new BadRequestError(`Blank Values:(${blankValues})`);
     }
 
-    const results = await create(inputData);
+    const { success } = await create(inputData);
 
-    if (!results.success) {
+    if (!success) {
       throw new BadRequestError(`${results.error}`);
     }
     return res
       .status(STATUS_CODES.CREATED)
-      .send({ status: "Created", code: STATUS_CODES.CREATED });
+      .send({ status: "Created", code: STATUS_CODES.CREATED, success });
   } catch (error) {
     next(error);
   }
@@ -125,7 +125,9 @@ const manageCart = async (req, res, next) => {
       quantity,
       false
     );
-    return res.status(STATUS_CODES.CREATED).send({ data });
+    return res
+      .status(STATUS_CODES.CREATED)
+      .send({ message: "Created", code: STATUS_CODES.CREATED, data });
   } catch (error) {
     next(error);
   }

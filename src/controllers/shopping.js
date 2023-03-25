@@ -1,4 +1,4 @@
-import { checkOrdersById, createOrder, orders } from "../services/order";
+import { getOrdersByCustomerId, createOrder, orders } from "../services/order";
 import { formatData } from "../utils/encryption/encryption";
 import { STATUS_CODES } from "../utils/appErrors";
 import { getShoppingDetails } from "../services/customer";
@@ -13,16 +13,20 @@ const placeOrder = async (req, res, next) => {
 
     const { data } = results.data;
 
-    return res.status(STATUS_CODES.CREATED).send({ data });
+    return res
+      .status(STATUS_CODES.CREATED)
+      .send({ message: "Created", code: STATUS_CODES.CREATED, data });
   } catch (error) {
     next(error);
   }
 };
 
-const getOrders = async (req, res, next) => {
+const getAllOrders = async (req, res, next) => {
   try {
-    const results = await orders();
-    return res.status(STATUS_CODES.OK).send(results);
+    const { data } = await orders();
+    return res
+      .status(STATUS_CODES.OK)
+      .send({ message: "OK", code: STATUS_CODES.OK, data: data });
   } catch (error) {
     next(error);
   }
@@ -31,22 +35,13 @@ const getOrders = async (req, res, next) => {
 const getOrdersByCustomer = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const { data } = await checkOrdersById(_id);
-    return res.status(STATUS_CODES.OK).send({ data });
+    const { data } = await getOrdersByCustomerId(_id);
+    return res
+      .status(STATUS_CODES.OK)
+      .send({ message: "OK", code: STATUS_CODES.OK, data: data });
   } catch (error) {
     next(error);
   }
 };
 
-const checkOrders = async (req, res, next) => {
-  const { _id } = req.user;
-
-  try {
-    const { data } = await getShoppingDetails(_id);
-    return res.status(STATUS_CODES.OK).send(data.orders);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export { placeOrder, checkOrders, getOrders, getOrdersByCustomer };
+export { placeOrder, getAllOrders, getOrdersByCustomer };

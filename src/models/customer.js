@@ -4,10 +4,19 @@ const Schema = mongoose.Schema;
 
 const CustomerSchema = new Schema(
   {
-    email: String,
-    password: String,
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
     salt: String,
-    phone: String,
+    phone: {
+      type: String,
+      required: true,
+    },
     address: [{ type: Schema.Types.ObjectId, ref: "Address", require: true }],
     cart: [
       {

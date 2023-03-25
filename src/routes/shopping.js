@@ -1,9 +1,5 @@
 import { Router } from "express";
-import {
-  checkOrders,
-  getOrdersByCustomer,
-  placeOrder,
-} from "../controllers/shopping";
+import { getOrdersByCustomer, placeOrder } from "../controllers/shopping";
 import userAuth from "../middleware/auth";
 
 const shoppingRouter = Router();

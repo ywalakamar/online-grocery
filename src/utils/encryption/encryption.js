@@ -10,7 +10,7 @@ const generatePassword = async (password, salt) => {
 };
 
 const validatePassword = async (userInput, savedPassword, salt) => {
-  return await generatePassword(userInput, salt) === savedPassword;
+  return (await generatePassword(userInput, salt)) === savedPassword;
 };
 
 const generateSignature = (payload) => {
@@ -26,10 +26,12 @@ const validateSignature = (req) => {
     const signature = req.get("Authorization");
     const payload = jwt.verify(signature.split(" ")[1], "SweetSecret");
     req.user = payload;
-    return true;
+
+    const user = req.user;
+
+    return { success: true, data: user };
   } catch (error) {
-    console.log(error);
-    return false;
+    return { success: false, data: error };
   }
 };
 
