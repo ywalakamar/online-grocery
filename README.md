@@ -1,4 +1,4 @@
-# EAPI npoints
+# API Endpoints
 ### Customers
 ##### Register Customer
 `POST: /api/v1/customers/signup`
@@ -11,7 +11,6 @@ Sample Request Body
 }
 ```
 `POST: /api/v1/customers/address`
-Sample Request Body
 ```json
 {
     "street":"Kenyatta Avenue", 
@@ -22,7 +21,6 @@ Sample Request Body
 ```
 ##### Customer Login
 `POST: /api/v1/customers/login`
-Sample Request Body
 ```json
 {
     "email":"shopper@shopmat.com", 
@@ -37,9 +35,8 @@ Sample Request Body
 ##### Get Customer Orders
 `GET: /api/v1/customers/orders`
 
-### Products Endpoint
+### Products
 ##### Create Product
-Sample Request Body
 `POST: /api/v1/products`
 ```json
 {
@@ -59,7 +56,6 @@ Sample Request Body
 `GET: /api/v1/products/:id`
 ##### Put Items To Cart
 `POST: /api/v1/cart`
-Sample Request Body
 ```json
 {
     "_id": "641ebba699d8328893d6e0ee", 
@@ -72,7 +68,6 @@ Sample Request Body
 ### Shopping
 ##### Place An Order
 `POST: /api/v1/shopping/order`
-Sample Request Body
 ```json
 {
     "transactionId": "ABC123ABC"
