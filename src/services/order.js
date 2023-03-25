@@ -4,12 +4,16 @@ import Order from "../models/order";
 
 const orders = async () => {
   try {
-    const orders = await Order.find().populate("items.product");
-    return orders;
-  } catch (error) {}
+    return {
+      success: true,
+      data: await Order.find().populate("items.product"),
+    };
+  } catch (error) {
+    return { success: false, error };
+  }
 };
 
-const checkOrdersById = async (custId) => {
+const getOrdersByCustomerId = async (custId) => {
   const customer = await Customer.findById(custId).populate("orders");
   try {
     if (customer) {
@@ -68,4 +72,4 @@ const createOrder = async (custId, transactionId) => {
   }
 };
 
-export { createOrder, orders, checkOrdersById };
+export { createOrder, orders, getOrdersByCustomerId };
