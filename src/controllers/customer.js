@@ -20,7 +20,6 @@ import {
   checkBlankValues,
   checkKeys,
   checkProperties,
-  isValidId,
 } from "../utils/validation/validations";
 
 const signUp = async (req, res, next) => {
@@ -121,7 +120,7 @@ const signIn = async (req, res, next) => {
 const getCustomerProfile = async (req, res, next) => {
   try {
     const _id = req.user;
-    const data = await getCustomerById(_id);
+    const { data } = await getCustomerById(_id);
     return res
       .status(STATUS_CODES.OK)
       .send({ status: "OK", code: STATUS_CODES.OK, data });

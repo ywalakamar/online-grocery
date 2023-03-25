@@ -2,6 +2,33 @@ import { v4 as uuidv4 } from "uuid";
 import Customer from "../models/customer";
 import Order from "../models/order";
 
+const orders = async () => {
+  try {
+    const orders = await Order.find().populate("items.product");
+    return orders;
+  } catch (error) {}
+};
+
+const checkOrdersById = async (custId) => {
+  const customer = await Customer.findById(custId).populate("orders");
+  try {
+    if (customer) {
+      const arr = customer.orders;
+
+      const data = [];
+
+      await Promise.all(
+        arr.map(async (item) => {
+          data.push(await item.populate("items.product"));
+        })
+      );
+      return { success: true, data: data };
+    }
+  } catch (error) {
+    return { success: false, error };
+  }
+};
+
 const createOrder = async (custId, transactionId) => {
   const customer = await Customer.findById(custId).populate("cart.product");
 
@@ -19,7 +46,7 @@ const createOrder = async (custId, transactionId) => {
         const orderId = uuidv4();
         const order = await Order.create({
           orderId,
-          custId,
+          customerId: custId,
           amount,
           transactionId,
           status: `received`,
@@ -41,4 +68,4 @@ const createOrder = async (custId, transactionId) => {
   }
 };
 
-export { createOrder };
+export { createOrder, orders, checkOrdersById };
