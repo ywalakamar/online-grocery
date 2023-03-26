@@ -1,3 +1,4 @@
+import "dotenv/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -15,7 +16,7 @@ const validatePassword = async (userInput, savedPassword, salt) => {
 
 const generateSignature = (payload) => {
   try {
-    return jwt.sign(payload, "SweetSecret", { expiresIn: "30d" });
+    return jwt.sign(payload, process.env.APP_SECRET, { expiresIn: "30d" });
   } catch (error) {
     console.log(error);
   }
