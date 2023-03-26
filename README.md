@@ -54,15 +54,15 @@ Sample Request Body
 `GET: /api/v1/products`
 ##### Fetch One Product
 `GET: /api/v1/products/:id`
-##### Put Items To Cart
-`POST: /api/v1/cart`
+##### Add Item To Cart
+`PUT: /api/v1/cart`
 ```json
 {
     "_id": "641ebba699d8328893d6e0ee", 
     "quantity": 8
 }
 ```
-##### Check Cart
+##### Check Cart Items
 `GET: /api/v1/cart`
 
 ### Shopping
