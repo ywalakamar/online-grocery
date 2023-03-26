@@ -1,4 +1,4 @@
-import { addCartItem, getCart } from "../services/customer";
+import { manageCart, getShoppingDetails } from "../services/customer";
 import { create, getAll, getOne } from "../services/product";
 import {
   BadRequestError,
@@ -69,7 +69,7 @@ const getProductById = async (req, res, next) => {
       throw new BadRequestError(`Invalid Id:(${id})`);
     }
 
-    const { data } = await getOne(req.params.id);
+    const { data } = await getOne(id);
 
     /*check if the returned json object is empty */
     if (!Object.keys(data).length) {
@@ -83,7 +83,7 @@ const getProductById = async (req, res, next) => {
   }
 };
 
-const manageCart = async (req, res, next) => {
+const addCartItem = async (req, res, next) => {
   const userInput = req.body;
   const { _id, quantity } = userInput;
   const customer = req.user;
@@ -118,13 +118,13 @@ const manageCart = async (req, res, next) => {
       throw new NotFoundError("No Product Record Found");
     }
 
-    // const product = data;
-    const { success } = await addCartItem(
+    const { success } = await manageCart(
       customer._id,
       product.data,
       quantity,
       false
     );
+
     return res
       .status(STATUS_CODES.CREATED)
       .send({ message: "Created", code: STATUS_CODES.CREATED, success });
@@ -133,20 +133,45 @@ const manageCart = async (req, res, next) => {
   }
 };
 
+const removeCartItem = async (req, res, next) => {
+  //const userInput = req.body;
+  const id = req.params.id;
+  const { _id } = req.user;
+  const validId = isValidId(id);
+  try {
+    /* check if the provided id is valid */
+    if (!validId) {
+      throw new BadRequestError(`Invalid Id:(${id})`);
+    }
+    const product = await getOne(id);
+    const { success } = await manageCart(_id, product.data, 0, true);
+    if (!success) {
+      throw new BadRequestError(`No Such Item In Cart`);
+    }
+    return res
+      .status(STATUS_CODES.OK)
+      .send({ message: "OK", code: STATUS_CODES.OK, success });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getCartItems = async (req, res, next) => {
   const { _id } = req.user;
 
-  const { data } = await getCart(_id);
-
+  const {
+    data: { cart },
+  } = await getShoppingDetails(_id);
   return res
     .status(STATUS_CODES.OK)
-    .json({ status: "OK", code: STATUS_CODES.OK, data });
+    .json({ status: "OK", code: STATUS_CODES.OK, data: cart });
 };
 
 export {
   createProduct,
   getAllProducts,
   getProductById,
-  manageCart,
+  addCartItem,
   getCartItems,
+  removeCartItem,
 };

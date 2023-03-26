@@ -66,7 +66,7 @@ const createAddress = async ({ _id, street, postalCode, city, country }) => {
   }
 };
 
-const addCartItem = async (custId, product, quantity, isRemove) => {
+const manageCart = async (custId, product, quantity, isRemove) => {
   try {
     //get customer
     const customer = await Customer.findById(custId).populate("cart.product");
@@ -85,12 +85,13 @@ const addCartItem = async (custId, product, quantity, isRemove) => {
               // remove item from cart if need be
               cartItems.splice(cartItems.indexOf(item), 1);
             } else {
-              // if item already exists, update quantity
+              // if item already exists, update quantity only
               item.unit = quantity;
             }
             isExist = true;
           }
         });
+
         if (!isExist) {
           // push item to cart
           cartItems.push(cartItem);
@@ -110,27 +111,11 @@ const addCartItem = async (custId, product, quantity, isRemove) => {
   }
 };
 
-const getCart = async (custId) => {
-  try {
-    //get customer
-    const customer = await Customer.findById(custId).populate("cart.product");
-    if (customer) {
-      // get cart items
-      const data = customer.cart;
-
-      return { success: true, data };
-    }
-  } catch (error) {
-    return { success: false, error };
-  }
-};
-
 const getShoppingDetails = async (id) => {
   try {
     return {
       success: true,
       data: await Customer.findById(id)
-        .populate("address")
         .populate("cart.product")
         .populate("orders"),
     };
@@ -145,7 +130,6 @@ export {
   getCustomerById,
   getCustomerByEmail,
   getCustomers,
-  addCartItem,
+  manageCart,
   getShoppingDetails,
-  getCart,
 };
