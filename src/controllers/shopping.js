@@ -8,14 +8,11 @@ const placeOrder = async (req, res, next) => {
   const { transactionId } = req.body;
 
   try {
-    const order = await createOrder(_id, transactionId);
-    const results = formatData(order);
-
-    const { data } = results.data;
+    const { success, data } = await createOrder(_id, transactionId);
 
     return res
       .status(STATUS_CODES.CREATED)
-      .send({ message: "Created", code: STATUS_CODES.CREATED, data });
+      .send({ message: "Created", code: STATUS_CODES.CREATED, success, data });
   } catch (error) {
     next(error);
   }
@@ -23,10 +20,10 @@ const placeOrder = async (req, res, next) => {
 
 const getAllOrders = async (req, res, next) => {
   try {
-    const { data } = await orders();
+    const { success, data } = await orders();
     return res
       .status(STATUS_CODES.OK)
-      .send({ message: "OK", code: STATUS_CODES.OK, data: data });
+      .send({ message: "OK", code: STATUS_CODES.OK, success, data });
   } catch (error) {
     next(error);
   }
@@ -35,10 +32,10 @@ const getAllOrders = async (req, res, next) => {
 const getOrdersByCustomer = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const { data } = await getOrdersByCustomerId(_id);
+    const { success, data } = await getOrdersByCustomerId(_id);
     return res
       .status(STATUS_CODES.OK)
-      .send({ message: "OK", code: STATUS_CODES.OK, data: data });
+      .send({ message: "OK", code: STATUS_CODES.OK, success, data });
   } catch (error) {
     next(error);
   }

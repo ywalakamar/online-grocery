@@ -62,9 +62,12 @@ const signUp = async (req, res, next) => {
     const token = generateSignature({ email: email, _id: results.data._id });
     var { data } = formatData({ id: results.data._id, token });
 
-    return res
-      .status(STATUS_CODES.CREATED)
-      .send({ message: "Created", code: STATUS_CODES.CREATED, data });
+    return res.status(STATUS_CODES.CREATED).send({
+      message: "Created",
+      code: STATUS_CODES.CREATED,
+      success: results.success,
+      data,
+    });
   } catch (error) {
     next(error);
   }
@@ -90,31 +93,38 @@ const signIn = async (req, res, next) => {
       throw new BadRequestError(`Blank Values:(${blankValues})`);
     }
 
-    const results = await getCustomerByEmail(email);
-    if (results.data === null) {
+    const { error, success, data } = await getCustomerByEmail(email);
+    if (data === null) {
       throw new NotFoundError(`Customer With Email ${email} Not Registered`);
     }
-    if (results.error) {
+    if (error) {
       throw new BadRequestError(`${results.error}`);
     }
 
     const validPassword = await validatePassword(
       password,
-      results.data.password,
-      results.data.salt
+      data.password,
+      data.salt
     );
 
     if (!validPassword) {
       throw new BadRequestError(`Invalid Password`);
     }
     const token = generateSignature({
-      email: results.data.email,
-      _id: results.data._id,
+      email: data.email,
+      _id: data._id,
     });
-    var { data } = formatData({ id: results.data._id, token });
-    return res
-      .status(STATUS_CODES.OK)
-      .send({ message: "OK", code: STATUS_CODES.OK, data });
+    const results = formatData({
+      id: data._id,
+      token,
+    });
+
+    return res.status(STATUS_CODES.OK).send({
+      message: "OK",
+      code: STATUS_CODES.OK,
+      success,
+      data: results.data,
+    });
   } catch (error) {
     next(error);
   }
@@ -122,10 +132,10 @@ const signIn = async (req, res, next) => {
 
 const getAllCustomers = async (req, res, next) => {
   try {
-    const { data } = await getCustomers();
+    const { success, data } = await getCustomers();
     return res
       .status(STATUS_CODES.OK)
-      .send({ message: "OK", code: STATUS_CODES.OK, data });
+      .send({ message: "OK", code: STATUS_CODES.OK, success, data });
   } catch (error) {
     next(error);
   }
@@ -134,10 +144,10 @@ const getAllCustomers = async (req, res, next) => {
 const getCustomerProfile = async (req, res, next) => {
   try {
     const _id = req.user;
-    const { data } = await getCustomerById(_id);
+    const { success, data } = await getCustomerById(_id);
     return res
       .status(STATUS_CODES.OK)
-      .send({ message: "OK", code: STATUS_CODES.OK, data });
+      .send({ message: "OK", code: STATUS_CODES.OK, success, data });
   } catch (error) {
     next(error);
   }
@@ -187,5 +197,5 @@ export {
   addCustomerAddress,
   getCustomerProfile,
   signIn,
-  getAllCustomers
+  getAllCustomers,
 };
