@@ -48,13 +48,13 @@ const createProduct = async (req, res, next) => {
 
 const getAllProducts = async (req, res, next) => {
   try {
-    const { data } = await getAll();
+    const { success, data } = await getAll();
     if (isEmpty(data)) {
       throw new NotFoundError("No Product Record Found");
     }
     return res
       .status(STATUS_CODES.OK)
-      .json({ status: "OK", code: STATUS_CODES.OK, data });
+      .json({ status: "OK", code: STATUS_CODES.OK, success, data });
   } catch (error) {
     next(error);
   }
@@ -69,7 +69,7 @@ const getProductById = async (req, res, next) => {
       throw new BadRequestError(`Invalid Id:(${id})`);
     }
 
-    const { data } = await getOne(id);
+    const { success, data } = await getOne(id);
 
     /*check if the returned json object is empty */
     if (!Object.keys(data).length) {
@@ -77,7 +77,7 @@ const getProductById = async (req, res, next) => {
     }
     return res
       .status(STATUS_CODES.OK)
-      .json({ status: "OK", code: STATUS_CODES.OK, data });
+      .json({ status: "OK", code: STATUS_CODES.OK, success, data });
   } catch (error) {
     next(error);
   }
@@ -160,11 +160,12 @@ const getCartItems = async (req, res, next) => {
   const { _id } = req.user;
 
   const {
+    success,
     data: { cart },
   } = await getShoppingDetails(_id);
   return res
     .status(STATUS_CODES.OK)
-    .json({ status: "OK", code: STATUS_CODES.OK, data: cart });
+    .json({ status: "OK", code: STATUS_CODES.OK, success, data: cart });
 };
 
 export {
