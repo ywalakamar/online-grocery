@@ -33,6 +33,10 @@ const createProduct = async (req, res, next) => {
       throw new BadRequestError(`Blank Values:(${blankValues})`);
     }
 
+    if (req.file) {
+      inputData.banner = req.file.path;
+    }
+
     const { success } = await create(inputData);
 
     if (!success) {

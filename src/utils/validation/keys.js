@@ -2,7 +2,6 @@ const keys = {
   productKeys: [
     "name",
     "desc",
-    "banner",
     "type",
     "unit",
     "price",
